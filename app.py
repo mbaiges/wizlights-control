@@ -3,19 +3,26 @@
 import asyncio
 from pywizlight import wizlight, PilotBuilder, discovery
 
-LIGHT_IP = "192.168.1.252"
+# LIGHT_IP = "192.168.1.43"
 
-light = light = wizlight(LIGHT_IP)
+# light = light = wizlight(LIGHT_IP)
+
+BULBS = []
+
+async def discover_bulbs():
+    return await discovery.discover_lights(broadcast_space="192.168.1.255")
 
 async def turn_on():
-    await light.turn_on(PilotBuilder(colortemp=5100))
+    for b in BULBS:
+        await b.turn_on(PilotBuilder(colortemp=3500))
 
 def turn_on_light():
     loop = asyncio.get_event_loop()
     loop.run_until_complete(turn_on())
 
 async def turn_off():
-    await light.turn_off()
+    for b in BULBS:
+        await b.turn_off()
 
 def turn_off_light():
     loop = asyncio.get_event_loop()
@@ -51,6 +58,12 @@ menu.addAction(quit)
 
 # Adding options to the System Tray
 tray.setContextMenu(menu)
+
+loop = asyncio.get_event_loop()
+BULBS = loop.run_until_complete(discover_bulbs())
+
+for b in BULBS:
+    print(f"Bulb IP address: {b.ip}")
 
 app.exec_()
 
