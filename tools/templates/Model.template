@@ -1,0 +1,12 @@
+import Model, { initModel, IBaseModelData } from 'main/models/Model';
+
+interface IModelData extends IBaseModelData {
+}
+
+class __class_name__ extends Model {
+  public readonly storagePrefix: string = '__storage_prefix__';
+  public readonly fillable: IModelData = {
+  };
+}
+
+export default initModel(__class_name__, new __class_name__().fillable);
