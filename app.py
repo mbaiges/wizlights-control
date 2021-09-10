@@ -1,6 +1,6 @@
 ## Light
 
-import asyncio
+import asyncio, keyboard
 from pywizlight import wizlight, PilotBuilder, discovery
 
 # LIGHT_IP = "192.168.1.43"
@@ -64,6 +64,22 @@ BULBS = loop.run_until_complete(discover_bulbs())
 
 for b in BULBS:
     print(f"Bulb IP address: {b.ip}")
+
+
+################### MUY FEO HOTKEY 
+st = loop.run_until_complete(BULBS[0].updateState())
+STATE = [st.pilotResult['state']]
+
+async def hotkey(st):
+    if st[0]:
+        await turn_off()
+        st[0] = False
+    else:
+        await turn_on()
+        st[0] = True
+
+keyboard.add_hotkey('F9', lambda: asyncio.run(hotkey(STATE)))
+###################
 
 app.exec_()
 
