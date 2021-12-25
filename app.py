@@ -60,11 +60,13 @@ menu.addAction(quit)
 tray.setContextMenu(menu)
 
 loop = asyncio.get_event_loop()
-BULBS = loop.run_until_complete(discover_bulbs())
+BULBS = []
+while(len(BULBS) == 0):
+	print("espera")
+	BULBS = loop.run_until_complete(discover_bulbs())
 
 for b in BULBS:
     print(f"Bulb IP address: {b.ip}")
-
 
 ################### MUY FEO HOTKEY 
 st = loop.run_until_complete(BULBS[0].updateState())
@@ -79,6 +81,7 @@ async def hotkey(st):
         st[0] = True
 
 keyboard.add_hotkey('F9', lambda: asyncio.run(hotkey(STATE)))
+
 ###################
 
 app.exec_()
